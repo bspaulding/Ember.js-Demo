@@ -1,0 +1,110 @@
+<html>
+<head>
+  <title>Ember.js Demo</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/prettify.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
+  <script type="text/javascript" src="javascripts/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="javascripts/prettify.js"></script>
+  <script type="text/javascript" src="javascripts/ember.min.js"></script>
+  <script type="text/javascript" src="javascripts/bootstrap-tabs.js"></script>
+  <script type="text/javascript" src="javascripts/bindings.js"></script>
+  <script type="text/javascript" src="javascripts/computed_properties.js"></script>
+  <script type="text/javascript" src="javascripts/todos.js"></script>
+</head>
+<body class="container" onload="prettyPrint()">
+
+<h1>Ember.js Demo <small>Using Bindings to Build Apps Fast</small></h1>
+
+<ul class="pills" data-pills>
+  <li class="active"><a href="#bindings">Bindings</a></li>
+  <li><a href="#computed-properties">Computed Properties</a></li>
+  <li><a href="#auto-updating-templates">Auto-updating Templates</a></li>
+  <li><a href="#todos">Todos App</a></li>
+</ul>
+
+<div class="pill-content">
+  <div class="active" id="bindings">
+    <pre class="prettyprint lang-js" style="float: left; margin-left: 20px">
+var Demo = Ember.Application.create();
+
+Demo.president = Ember.Object.create({
+  name: "Barack Obama"
+});
+
+Demo.country = Ember.Object.create({
+  // Ending a property with 'Binding' tells Ember.js to
+  // create a binding to the presidentName property.
+  presidentNameBinding: 'Bindings.president.name'
+});
+
+Demo.country.get('presidentName');
+// "Barack Obama"
+    </pre>
+    <div style="float: left; margin-left: 20px;" class="form-stacked">
+      <script type="text/x-handlebars">
+        <label>Demo.president.name</label>{{view Ember.TextField class="xlarge" valueBinding="Bindings.president.name"}}<br/><br/>
+        <label>Demo.country.presidentName</label>{{Bindings.country.presidentName}}
+      </script>      
+    </div>
+  </div>
+
+  <div id="computed-properties">
+    <pre class="prettyprint lang-js" style="float: left; margin-left: 20px;">
+var Demo = Ember.Application.create({ rootElement: '#computed-properties' });
+
+Demo.president = Ember.Object.create({
+  firstName: 'Barack',
+  lastName: 'Obama',
+
+  fullName: function() {
+    return [this.get('firstName'), this.get('lastName')].join(' ');
+  }.property('firstName', 'lastName')
+});
+    </pre>
+    <div style="float: left; margin-left: 20px;" class="form-stacked">
+      <script type="text/x-handlebars">
+          <div class="span2" style="margin-top: 20px;">
+            <label>Demo.president.firstName</label>
+            {{view SC.TextField valueBinding="ComputedProperties.president.firstName"}}
+          </div>
+          <div class="span2" style="margin-top: 20px;">
+            <label>Demo.president.lastName</label>
+            {{view SC.TextField valueBinding="ComputedProperties.president.lastName"}}
+          </div>
+          <div class="span3" style="margin-top: 20px;">
+            <label>Demo.president.fullName</label>
+            {{ComputedProperties.president.fullName}}
+          </div>
+      </script>
+    </div>
+  </div>
+
+  <div id="auto-updating-templates">
+    <pre class="prettyprint lang-html" style="float: left; margin-left: 20px;">
+&lt;script type="text/x-handlebars"&gt;
+  The President of the United States is {{Demo.president.fullName}}.
+&lt;/script&gt;
+    </pre>
+    <div style="float: left; margin-left: 20px;" class="form-stacked">
+      <script type="text/x-handlebars">
+        The President of the United States is {{ComputedProperties.president.fullName}}.
+      </script>
+    </div>
+  </div>
+
+  <div id="todos">
+    <script type="text/x-handlebars">
+      {{view Todos.TextField class="xlarge" id="new-todo"}} 
+      {{#view Ember.Button class="btn primary" target="Todos.todosController" action="createTodo"}}Create Todo{{/view}}
+      {{#view Ember.Button class="btn danger" target="Todos.todosController" action="clearCompleted"}}Clear Completed{{/view}}<br/><br/>
+      <div id="todos-list">
+        {{#collection tagName="ul" class="unstyled" itemClassBinding="content.complete" contentBinding="Todos.todosController.content"}}
+          {{view Ember.Checkbox valueBinding="content.complete" titleBinding="content.title"}}
+        {{/collection}}
+      </div>
+    </script>
+  </div>
+</div>
+</body>
+</html>

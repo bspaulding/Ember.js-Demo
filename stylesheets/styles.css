@@ -1,0 +1,25 @@
+body {
+  padding-top: 20px;
+}
+
+input, textarea, select, .uneditable-input { height: auto; }
+
+#todos-list label {
+  width: auto;
+  text-align: left;
+  float: none;
+}
+
+#todos-list label input[type="checkbox"] { margin-right: 10px; }
+
+#todos-list ul li.complete { text-decoration: line-through; }
+
+#todos {
+  padding-left: 20px;
+}
+
+pre.prettyprint {
+  -webkit-box-shadow: inset 0px 0px 7px #CCC;
+  padding: 20px;
+  border: 1px solid #CCC;
+}
